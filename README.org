@@ -1,2 +1,16 @@
 blips 
 
+* wires
+
+
+#+BEGIN_EXAMPLE
+  $ wirecell-util make-wires foo.json.bz2
+  $ wirecell-util plot-select-channels foo.json.bz2 figures/select-u-chans.svg  1000 1340 1399
+  $ wirecell-util plot-select-channels foo.json.bz2 figures/select-v-chans.svg  2000 2059  2399
+#+END_EXAMPLE
+
+[[./figures/select-u-chans.svg]]
+
+[[./figures/select-v-chans.svg]]
+
+[[./figures/select-w-chans.svg]]
