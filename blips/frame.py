@@ -1,5 +1,6 @@
 import numpy
 
+
 def coalesce(frame, combine=(3,3), step=(2,2), op = numpy.sum):
     '''
     Return a new frame built by rastering over the input frame,
@@ -29,6 +30,14 @@ def coalesce(frame, combine=(3,3), step=(2,2), op = numpy.sum):
             ret[orow,ocol] = pixel
     return ret
 
+def convolve(frame, mask):
+    '''
+    Run mask over frame in a 2D convolution, returning the result.
+
+    See avg_blips() for possible mask.  A step is another likely function.
+    '''
+    from scipy.signal import convolve2d
+    return convolve2d(frame, mask, 'same')
 
 def baseline_subtract(frame):
     '''
@@ -65,7 +74,7 @@ def find_blips(frame, threshold, shape=(3,10)):
         tick_range = (center[1] - shape[1]//2,
                       center[1] - shape[1]//2 + shape[1])
                       
-        print ind, center, chan_range, tick_range
+        #print ind, center, chan_range, tick_range
 
         # Only save blips that do not hit the edge
         if chan_range[0] >= 0 and chan_range[1] < frame.shape[0] and \

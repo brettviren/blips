@@ -14,3 +14,22 @@ blips
 [[./figures/select-v-chans.svg]]
 
 [[./figures/select-w-chans.svg]]
+
+* average Ar39 shape
+
+
+[[./figures/ar39avgshape.pdf]]
+
+
+* selection
+
+** Alex/Mike
+
+#+BEGIN_QUOTE
+[...] integrating around some fixed
+window size, centered at the wire/tick with maximum signal amplitude
+for the tagged Ar-39 candidate event.
+#+END_QUOTE
+
+- window :: 3 chans x 40 ticks
+

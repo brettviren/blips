@@ -2,7 +2,6 @@
 '''
 Visualize stuff
 '''
-from wirecell.util.wires import apa, graph
 import numpy
 from collections import defaultdict
 
@@ -10,43 +9,6 @@ import matplotlib.pyplot as plt
 
 
 
-
-def dune_numpy_saver_to_planes(frame, channels):
-    '''
-    Make "event display" from a DUNE frame and channel array saved by
-    NumpySaver.  Frame should be shaped (nchannels, nticks) which is
-    likely transposed from how NumpySaver saves.
-    '''
-
-    # fixme: move this out to a function
-    det_params = apa.Description()
-    G,P = apa.graph(det_params)
-    flat = graph.flatten_to_conductor(G)
-    by_chan = {one['channel']:one for one in flat}
-
-
-
-    nticks = frame.shape[1]
-    arrs = [
-        numpy.zeros((400*2, nticks), dtype='f'), 
-        numpy.zeros((400*2, nticks), dtype='f'), 
-        numpy.zeros((480*2, nticks), dtype='f'), 
-    ]
-    for chn, wf in zip(channels, frame):
-        chdat = by_chan[chn]
-        arrs[chdat['plane']][chdat['wanglobal']] = wf
-
-    return arrs
-
-def uboone_numpy_saver_to_planes(frame, channels):
-    '''
-    Make "event display" from a MicroBooNE frame saved by NumpySaver.
-    Frame should be shaped (nchannels, nticks) which is likely
-    transposed from how NumpySaver saves.
-    '''
-    return (frame[channels<2400],
-            frame[(channels>=2400) & (channels<4800)],
-            frame[channels>=4800])
 
 def threeplanes(planes, threshold=25):
     '''
