@@ -1,0 +1,34 @@
+# Produced from 'fhicl-dump' using:
+#   Input  : eventdump.fcl
+#   Policy : cet::filepath_maker
+#   Path   : "FHICL_FILE_PATH"
+
+# mucking about by bv
+
+process_name: bveventdump
+
+outputs: {
+   out1: {
+      module_type: "FileDumperOutput"
+      wantProductFriendlyClassName: false
+      wantProductFullClassName: true
+   }
+}
+physics: {
+   analyzers: {}
+   end_paths: [
+      "stream1"
+   ]
+   filters: {}
+   producers: {}
+   stream1: [
+      "out1"
+   ]
+}
+process_name: "Dump"
+services: {}
+source: {
+   maxEvents: 1
+   module_type: "RootInput"
+   inputCommands: ["drop *", "keep raw::RawDigits_*_*_*"]
+}
