@@ -21,7 +21,7 @@ def plots(frw, blip_shape = (3,40), pdffile="blips_sel_plots.pdf"):
         bl = numpy.median(frw, axis=1).T
 
         plt.title("Median Baselines")
-        plt.hist(bl,20, log=True)
+        plt.hist(bl, 100, log=True)
         plt.xlabel('ADC')
         pdf.savefig()
         plt.close()
@@ -45,6 +45,22 @@ def plots(frw, blip_shape = (3,40), pdffile="blips_sel_plots.pdf"):
         # figure out threshold
         thresholds = [5, 10,15,20,25]
         blips = frame.find_blips(sub, thresholds[0], blip_shape)
+        print "Found %d blips threshold > %d" % (len(blips), thresholds[0])
+
+        blip_border_sums = [frame.border_sum(blip) for blip in blips]
+        plt.title("Frame border sums")
+        plt.hist(numpy.asarray(blip_border_sums), 100, log=True)
+        plt.xlabel('frame border sum [ADC]')
+        pdf.savefig()
+        plt.close()
+
+        max_border_sum = 500
+        tight_blips = list()
+        for blip, bbs in zip(blips, blip_border_sums):
+            if bbs < max_border_sum:
+                tight_blips.append(blip)
+        blips = tight_blips
+        print "Kept %d blips with frame sum < %d" % (len(blips), max_border_sum)
 
         # loop over thresholds:
         plt.title("Blip summed ADC vs peak sample thresholds")
@@ -54,7 +70,7 @@ def plots(frw, blip_shape = (3,40), pdffile="blips_sel_plots.pdf"):
                 if numpy.max(blip) < threshold:
                     continue
                 qtot.append(numpy.sum(blip))
-            plt.hist(qtot,20, label="%d ADC"%threshold);
+            plt.hist(qtot, 50, label="%d ADC"%threshold)
         plt.xlabel('total sample value near blip [ADC]')
         plt.legend(title='Threshold')
         pdf.savefig()

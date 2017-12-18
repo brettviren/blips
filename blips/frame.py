@@ -107,3 +107,15 @@ def avg_blips(blips):
         peak += numpy.max(blip)
         ret += blip
     return ret / peak
+
+def border_sum(blip, border=1):
+    '''
+    Return the sum of samples around border of blip.
+    '''
+    return numpy.sum(blip) - numpy.sum(blip[border:-border, border:-border])
+    # tot = 0.0
+    # tot += numpy.sum(blip[:,:border]) + numpy.sum(blip[:,-border:])
+    # tot += numpy.sum(blip[:border,:]) + numpy.sum(blip[-border:,:])
+    # tot -= numpy.sum(blip[ :border, :border]) + numpy.sum(blip[ :border,-border:])
+    # tot -= numpy.sum(blip[-border:,-border:]) + numpy.sum(blip[-border:,:border])
+    # return tot

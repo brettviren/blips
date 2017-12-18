@@ -15,8 +15,15 @@ def load_numpy_saver(filename, count=0, tag=""):
     frame_key = 'frame_%s_%d' % (tag, count)
     chan_key = 'channels_%s_%d' % (tag, count)
     f = numpy.load(filename)
-    fr = f[frame_key].T
-    ch = f[chan_key]
+    try:
+        fr = f[frame_key].T
+        ch = f[chan_key]
+    except KeyError:
+        print('Failed to get data for frame %d tag "%s", here are the file keys:' % (count,tag))
+        keys = ' '.join(sorted(f.keys()))
+        print (keys)
+        raise
+    
     return fr,ch
 
 

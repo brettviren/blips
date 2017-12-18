@@ -2,3 +2,7 @@ venv*
 *~
 *.pyc
 *.egg-info
+*.npz
+*.root
+*.log
+*.pdf
