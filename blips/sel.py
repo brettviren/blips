@@ -35,6 +35,16 @@ def plots(frw, blip_shape = (3,40), pdffile="blips_sel_plots.pdf"):
 
 
         sub = frame.baseline_subtract(frw)
+
+        plt.imshow(sub,aspect='auto')
+        plt.colorbar()
+        plt.title("ADC")
+        plt.xlabel("tick")
+        plt.ylabel("collection channel")
+        pdf.savefig()
+        plt.close()
+        
+
         # plot ADC hist
         plt.title("Baseline subtracted (all samples)")
         plt.hist(numpy.asarray(sub.flat), 100, log=True)

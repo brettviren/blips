@@ -6,3 +6,8 @@ venv*
 *.root
 *.log
 *.pdf
+.lock-waf*
+.waf*
+build
+wire-cell-python
+auto

@@ -17,6 +17,11 @@ blips
 
 * average Ar39 shape
 
+#+BEGIN_EXAMPLE
+$ source  venv2/bin/activate
+
+#+END_EXAMPLE
+
 
 [[./figures/ar39avgshape.pdf]]
 
@@ -33,3 +38,25 @@ for the tagged Ar-39 candidate event.
 
 - window :: 3 chans x 40 ticks
 
+
+* Runtime
+
+Use UPS binaries and start a subshell configured for them:
+
+#+BEGIN_EXAMPLE
+  $ ./ups-shenanigans.sh shell blips v0_7_blips
+  $ which wire-cell
+  /home/bviren/dev/wcls/pp/tasks/blips/wirecell/v0_7_blips/Linux64bit+4.4-2.23-e14-prof/bin/wire-cell
+  $ export WIRECELL_PATH=`pwd`/wctcfg:/opt/bviren/wct-dev/share/wirecell/data:$HOME/dev/wct/src/cfg
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  $ wirecell-util make-wires -d apa dune-wires.json.bz2
+  $ wire-cell -c wctcfg/noise-ar39-sim.jsonnet
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+  $ wirecell-util make-map -d apa channel-map.npz
+  $ ./waf configure build
+  $ ./build/test_nparray channel-map.npz dune-wctsim-fullrate-adc-noise.npz  out.npz
+#+END_EXAMPLE
