@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 
     stop = std::chrono::high_resolution_clock::now();
     elapsed_seconds = stop-start;
-    std::cerr << "copy " << nwchans << " collection channels in " << elapsed_seconds.count() << std::endl;
+    std::cerr << "copy " << nwchans << " collection channels x "<< nticks <<" ticks in " << elapsed_seconds.count() << std::endl;
 
 
     // find baselines and noise widths.

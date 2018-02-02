@@ -3,11 +3,85 @@
 Main CLI for blips
 '''
 import click
+import numpy
+import matplotlib.pyplot as plt 
+from matplotlib.backends.backend_pdf import PdfPages
 
 @click.group()
 @click.pass_context
 def cli(ctx):
     pass
+
+@cli.command("plot-frames")
+@click.option("-o","--output", default="sim-plots.pdf",
+              help="Output PDF file.")
+@click.argument("npzfile")
+@click.pass_context
+def plot_frames(ctx, output, npzfile):
+    '''
+    Plot some basic things from the wire-cell simulation output.
+    '''
+    from blips import sim
+    with PdfPages(output) as pdf:
+        for frame in sim.frames(npzfile):
+
+            for plotter in [sim.plot_raw_frame,
+                            sim.plot_channels,
+                            sim.plot_planes]:
+                fig = plotter(frame)
+                pdf.savefig(fig)
+                plt.close()
+
+
+@cli.command("plot-primitives")
+@click.option("-o","--output", default="sim-plots.pdf",
+              help="Output PDF file.")
+@click.argument("npzfile")
+@click.pass_context
+def plot_primitives(ctx, output, npzfile):
+    '''
+    Plot some things from the output of test_nparray
+    '''
+    from blips import sim
+    arrs = numpy.load(npzfile)
+
+    frame = sim.Frame(arrs['fullframe'], arrs['channels'], None, 0, "")
+    with PdfPages(output) as pdf:
+        for plotter in [sim.plot_raw_frame,
+                        sim.plot_channels,
+                        sim.plot_planes]:
+            fig = plotter(frame)
+            pdf.savefig(fig)
+            plt.close()
+
+        def plot_array(arr, tit="", xlab="", ylab=""):
+            fig, ax = plt.subplots(nrows=1,ncols=1)
+            ax.set_title(tit)
+            ax.set_xlabel(xlab)
+            ax.set_ylabel(ylab)
+            im = ax.imshow(arr, aspect='auto')
+            fig.colorbar(im, ax=[ax])
+            pdf.savefig(fig)
+            plt.close()
+
+        plot_array(arrs['colframe'], "Collection Frame", "tick", "channel index array")
+
+        fig, axes = plt.subplots(nrows=2,ncols=1)
+        minadc = 350
+        maxadc = 450
+        for ind,(ax, name) in enumerate(zip(axes, ['hist', 'cumu'])):
+            arr = arrs[name]
+            if ind == 0:
+                ax.set_title("ADC values -- %s"%name)
+            ax.set_xlabel("channel")
+            ax.set_ylabel("ADC - %d" % minadc)
+            im = ax.imshow(arr[minadc:maxadc,:], aspect='auto')
+            fig.colorbar(im, ax=[ax])
+        pdf.savefig(fig)
+        plt.close()
+            
+        plot_array(arrs['blipmask'], "Trigger Primitives", "tick", "channel index array")
+    
 
 @cli.command("sel-plots")
 @click.option("-d","--detector", type=click.Choice(["dune","uboone"]),

@@ -11,3 +11,4 @@ venv*
 build
 wire-cell-python
 auto
+latexmk-out
