@@ -84,9 +84,13 @@ def plot_channels(frame):
     Plot the channel identity numbers
     '''
     fig, ax = plt.subplots(nrows=1,ncols=1)
-    ax.set_title("Channel Identity Numbers for frame %d %s" % (frame.number, frame.tag))
+    ax.set_title("Channel Identity Numbers for Frame %d %s" % (frame.number, frame.tag))
     ax.set_xlabel("channel array index")
     ax.set_ylabel("channel ident")
+    ax.text(0,  16000,"Front face, z<0")
+    ax.text(660,19000,"Front face, z>0")
+    ax.text(1150, 37000, "Back face, z<0")
+    ax.text(1700, 40000, "Back face, z>0")
     ax.plot(frame.channels)
     return fig
     

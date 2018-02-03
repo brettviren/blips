@@ -173,8 +173,13 @@ int main(int argc, char* argv[])
 
     // Find the ADC value of the low-side percentile threshold and
     // median ADC values.
+
+    // This is what fraction of the cumulative distribution of ADC for
+    // a channel must be reached to consider this the start of noise.
+    const float primitive_threshold = 0.001;
+    const float noise_factor = 2.0; // how many factors above the noise must the signal be.
     const int median_sum = nticks*0.50;
-    const int thresh_sum = nticks*0.001;
+    const int thresh_sum = nticks*primitive_threshold;
     Eigen::ArrayXi baseline = Eigen::ArrayXi::Zero(nwchans);
     Eigen::ArrayXi threshold = Eigen::ArrayXi::Zero(nwchans);
     for (int ich=0; ich < nwchans; ++ich) {
@@ -197,7 +202,9 @@ int main(int argc, char* argv[])
     stop = std::chrono::high_resolution_clock::now();
     elapsed_seconds = stop-start;
     std::cerr << "find baseline/thresholds in " << elapsed_seconds.count() << std::endl;
-
+    std::cerr << "relative cumulative threshold: " << primitive_threshold
+              << " noise factor: " << noise_factor
+              << std::endl;
 
     // Finally find times above threshold
     start = std::chrono::high_resolution_clock::now();
@@ -212,7 +219,8 @@ int main(int argc, char* argv[])
     };
     std::vector<TAT> primitives;
     for (int ich=0; ich < nwchans; ++ich) {
-        const int absthresh = 2*baseline(ich) - threshold(ich);
+        const int dthresh = baseline(ich) - threshold(ich);
+        const int absthresh = baseline(ich) + noise_factor*dthresh;
         //std::cout << ich << " " << threshold(ich) << " " << baseline(ich) << std::endl;
         int adcsum = 0;
         int tmin = 0;

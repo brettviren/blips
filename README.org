@@ -99,7 +99,7 @@ Using the simulation output file run some quasi realistic L0 trigger primitive p
   dump intermdiates to numpy in 0.211291
 #+END_EXAMPLE
 
-Times are in seconds on a Xeon E5-2630 v4 @ 2.20GHz.
+Times are in seconds on a Xeon E5-2630 v4 @ 2.20GHz.  Rounding up, about 50 core-ms are needed to process 480 channels of 5ms data.  IOW, 20 cores (coincidentally one such Xeon CPU) is needed to keep up with one APA's collection data.  Note: this is a rather slow, if high thread count CPU.
 
 ** Plots
 
